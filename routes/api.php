@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\VerificationController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/login', [AuthController::class, 'login']);
+Route::post('/admin/login', [AuthController::class, 'adminLogin']);
 Route::get('/verify/{code}', [VerificationController::class, 'verify']);
 
 Route::middleware('api.token')->group(function () {
