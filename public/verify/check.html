@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Verify Document</title>
+  <style>
+    :root {
+      --bg: #f9fbf8;
+      --text: #1f2937;
+      --primary: #2a9d8f;
+      --danger: #b91c1c;
+      --ok: #166534;
+      --panel: #ffffff;
+      --line: #dbe4ec;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, sans-serif;
+      color: var(--text);
+      background: linear-gradient(180deg, #e3f6f3 0%, var(--bg) 45%);
+      min-height: 100vh;
+      padding: 24px;
+    }
+    .wrap { max-width: 760px; margin: 0 auto; }
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 18px;
+      margin-bottom: 16px;
+    }
+    h1 { margin: 0 0 8px; }
+    form { display: flex; gap: 10px; flex-wrap: wrap; }
+    input {
+      flex: 1 1 300px;
+      padding: 11px;
+      border: 1px solid #c9d7e3;
+      border-radius: 8px;
+      text-transform: uppercase;
+    }
+    button {
+      border: 0;
+      border-radius: 8px;
+      padding: 11px 16px;
+      background: var(--primary);
+      color: white;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .status { font-weight: 700; margin: 10px 0; }
+    .ok { color: var(--ok); }
+    .bad { color: var(--danger); }
+    dl {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 8px;
+      margin: 0;
+    }
+    dt { font-weight: 700; }
+    dd { margin: 0; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="panel">
+      <h1>Public Document Verification</h1>
+      <p>Enter or scan the verification code printed on the document QR.</p>
+      <form id="verify-form">
+        <input id="code-input" name="code" placeholder="Enter verification code" required>
+        <button type="submit">Verify</button>
+      </form>
+    </div>
+
+    <div class="panel" id="result-panel" hidden>
+      <p class="status" id="status-text"></p>
+      <p id="message-text"></p>
+      <dl id="document-details"></dl>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('verify-form');
+    const codeInput = document.getElementById('code-input');
+    const resultPanel = document.getElementById('result-panel');
+    const statusText = document.getElementById('status-text');
+    const messageText = document.getElementById('message-text');
+    const details = document.getElementById('document-details');
+
+    function extractCodeFromUrl() {
+      const pathParts = window.location.pathname.split('/').filter(Boolean);
+      if (pathParts.length === 2 && pathParts[0].toLowerCase() === 'verify') {
+        return pathParts[1];
+      }
+      const queryCode = new URLSearchParams(window.location.search).get('code');
+      return queryCode || '';
+    }
+
+    function setDetails(documentData) {
+      details.innerHTML = '';
+      if (!documentData) {
+        return;
+      }
+      const rows = [
+        ['Title', documentData.title || '-'],
+        ['Type', documentData.document_type || '-'],
+        ['Number', documentData.document_number || '-'],
+        ['Recipient', documentData.recipient_name || '-'],
+        ['Issued Date', documentData.issued_at || '-'],
+        ['Expires Date', documentData.expires_at || '-'],
+        ['Status', documentData.status || '-'],
+        ['Verification Code', documentData.verification_code || '-'],
+      ];
+      rows.forEach(([label, value]) => {
+        const dt = document.createElement('dt');
+        dt.textContent = label;
+        const dd = document.createElement('dd');
+        dd.textContent = value;
+        details.append(dt, dd);
+      });
+    }
+
+    async function verifyCode(code) {
+      resultPanel.hidden = false;
+      statusText.className = 'status';
+      statusText.textContent = 'Checking document...';
+      messageText.textContent = '';
+      details.innerHTML = '';
+
+      try {
+        const response = await fetch(`/api/verify/${encodeURIComponent(code)}`);
+        const data = await response.json();
+
+        const isValid = Boolean(data.valid);
+        statusText.textContent = isValid ? 'VALID DOCUMENT' : 'INVALID OR REVOKED';
+        statusText.classList.add(isValid ? 'ok' : 'bad');
+        messageText.textContent = data.message || 'No message provided.';
+        setDetails(data.document);
+      } catch (error) {
+        statusText.textContent = 'Verification error';
+        statusText.classList.add('bad');
+        messageText.textContent = 'Unable to connect to verification API.';
+      }
+    }
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const code = codeInput.value.trim().toUpperCase();
+      if (!code) return;
+      await verifyCode(code);
+    });
+
+    const initialCode = extractCodeFromUrl();
+    if (initialCode) {
+      codeInput.value = initialCode.toUpperCase();
+      verifyCode(codeInput.value);
+    }
+  </script>
+</body>
+</html>
