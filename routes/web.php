@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 Route::redirect('/', '/index.html');
 
 Route::get('/admin', function () {
-    return response()->file(public_path('admin/home.html'));
+    return response()->file(public_path('admin/index.html'));
 });
 
 Route::get('/admin/login', function () {
@@ -17,7 +17,7 @@ Route::get('/admin/dashboard', function () {
 });
 
 Route::get('/verify', function () {
-    return response()->file(public_path('verify/home.html'));
+    return response()->file(public_path('verify/index.html'));
 });
 
 Route::get('/verify/check', function () {
