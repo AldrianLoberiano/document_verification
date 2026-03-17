@@ -5,73 +5,33 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Admin Dashboard - Document Verification</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" defer></script>
+  <link rel="stylesheet" href="/assets/ui.css">
   <style>
-    :root {
-      --bg: #f1f7ff;
-      --text: #112d4e;
-      --panel: #ffffff;
-      --line: #d6e0ee;
-      --primary: #2c5282;
-      --danger: #b91c1c;
-      --ok: #166534;
+    .status-active { color: var(--ok-600); font-weight: 700; }
+    .status-revoked { color: var(--danger-600); font-weight: 700; }
+    .table-link {
+      display: inline-block;
+      max-width: 280px;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      color: var(--brand-700);
+      text-decoration: none;
     }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: "Segoe UI", Tahoma, sans-serif;
-      background: linear-gradient(145deg, #d9e9ff 0%, var(--bg) 40%);
-      color: var(--text);
-      padding: 20px;
-    }
-    .container { max-width: 1120px; margin: 0 auto; display: grid; gap: 14px; }
-    .panel {
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      padding: 16px;
-      overflow-x: auto;
-    }
-    .topbar { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
-    h1, h2 { margin: 0 0 10px; }
-    .muted { color: #526477; }
-    input, textarea {
-      width: 100%;
-      padding: 9px;
-      border: 1px solid #bfd0e0;
-      border-radius: 8px;
-      margin-top: 4px;
-    }
-    button {
-      background: var(--primary);
-      color: white;
-      border: 0;
-      border-radius: 8px;
-      padding: 9px 12px;
-      cursor: pointer;
-      font-weight: 600;
-    }
-    .danger { background: var(--danger); }
-    .secondary { background: #4a5568; }
-    .row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
-    table { width: 100%; border-collapse: collapse; min-width: 900px; }
-    th, td { border-bottom: 1px solid #e2e8f0; padding: 8px; text-align: left; }
-    th { background: #f7fbff; }
-    .status-active { color: var(--ok); font-weight: 700; }
-    .status-revoked { color: var(--danger); font-weight: 700; }
-    .actions { display: flex; gap: 6px; flex-wrap: wrap; }
     #qr-container { min-height: 128px; }
   </style>
 </head>
-<body>
-  <div class="container">
+<body class="page-shell theme-admin" style="display:block;">
+  <div class="layout-stack">
     <section class="panel">
       <div class="topbar">
         <div>
+          <span class="kicker">Admin Console</span>
           <h1>Admin Dashboard</h1>
-          <p class="muted" id="auth-state">Checking session...</p>
+          <p class="subtext" id="auth-state">Checking session...</p>
         </div>
-        <div class="actions">
-          <a href="/admin" style="text-decoration:none;"><button type="button" class="secondary">Admin Home</button></a>
+        <div class="inline-actions">
+          <a class="btn btn-ghost" href="/admin">Admin Home</a>
           <button id="logout-btn" class="danger" type="button">Logout</button>
         </div>
       </div>
@@ -80,7 +40,7 @@
     <section class="panel" id="dashboard">
       <h2>Upload New Document</h2>
       <form id="doc-form">
-        <div class="row">
+        <div class="row-grid">
           <label>Title<input name="title" required></label>
           <label>Document Type<input name="document_type" required></label>
           <label>Document Number<input name="document_number"></label>
@@ -90,12 +50,13 @@
         </div>
         <label>Notes<textarea name="notes" rows="2"></textarea></label>
         <label>Document File (PDF/JPG/PNG, max 10MB)<input type="file" name="document_file" accept=".pdf,.png,.jpg,.jpeg" required></label>
-        <button type="submit">Upload Document</button>
+        <button class="primary" type="submit">Upload Document</button>
       </form>
     </section>
 
     <section class="panel" id="documents-panel">
       <h2>Documents</h2>
+      <div class="table-wrap">
       <table>
         <thead>
           <tr>
@@ -109,10 +70,12 @@
         </thead>
         <tbody id="documents-body"></tbody>
       </table>
+      </div>
     </section>
 
     <section class="panel" id="logs-panel">
       <h2>Verification Logs (Latest 200)</h2>
+      <div class="table-wrap">
       <table>
         <thead>
           <tr>
@@ -124,6 +87,7 @@
         </thead>
         <tbody id="logs-body"></tbody>
       </table>
+      </div>
     </section>
 
     <section class="panel" id="qr-panel" hidden>
@@ -193,9 +157,9 @@
           <td>${escapeHtml(doc.document_type)}</td>
           <td>${escapeHtml(doc.verification_code)}</td>
           <td class="status-${escapeHtml(doc.status)}">${escapeHtml(doc.status)}</td>
-          <td><a href="${escapeHtml(doc.verification_url)}" target="_blank">${escapeHtml(doc.verification_url)}</a></td>
+          <td><a class="table-link" href="${escapeHtml(doc.verification_url)}" target="_blank">${escapeHtml(doc.verification_url)}</a></td>
           <td>
-            <div class="actions">
+            <div class="inline-actions">
               <button data-action="qr">Show QR</button>
               <button data-action="download">Download</button>
               <button data-action="revoke" class="secondary">Revoke</button>
