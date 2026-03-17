@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/index.html');
+Route::redirect('/login', '/admin/login');
 
 Route::get('/admin', function () {
     return response()->file(public_path('admin/index.html'));
