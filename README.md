@@ -23,8 +23,11 @@ This implementation uses plain HTML templates from the public folder (no Blade t
 ## Project Pages
 
 - Landing page: /
-- Admin dashboard: /admin
-- Public verify page: /verify
+- Admin home: /admin
+- Admin login page: /admin/login
+- Admin dashboard: /admin/dashboard
+- Verification home: /verify
+- Public verify page: /verify/check
 - Verify by QR code path: /verify/{code}
 
 ## Default Admin Account
@@ -60,6 +63,7 @@ Change this immediately in production.
 ## Main API Endpoints
 
 - POST /api/login
+- POST /api/admin/login
 - POST /api/logout
 - GET /api/me
 - GET /api/verify/{code}
