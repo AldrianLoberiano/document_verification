@@ -40,6 +40,40 @@ class AuthController extends Controller
         ]);
     }
 
+    public function adminLogin(Request $request)
+    {
+        $credentials = $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required', 'string'],
+        ]);
+
+        $user = User::query()->where('email', $credentials['email'])->first();
+
+        if (! $user || ! Hash::check($credentials['password'], $user->password)) {
+            return response()->json(['message' => 'Invalid email or password.'], 422);
+        }
+
+        if ($user->role !== 'admin') {
+            return response()->json(['message' => 'Admin access only.'], 403);
+        }
+
+        $plainToken = Str::random(60);
+        $user->forceFill([
+            'api_token' => hash('sha256', $plainToken),
+        ])->save();
+
+        return response()->json([
+            'message' => 'Admin login successful.',
+            'token' => $plainToken,
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'role' => $user->role,
+            ],
+        ]);
+    }
+
     public function me(Request $request)
     {
         $user = $request->user();
