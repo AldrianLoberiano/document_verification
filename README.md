@@ -19,6 +19,17 @@ This implementation uses plain HTML templates from the public folder (no Blade t
 - Laravel 12
 - MySQL or SQLite
 - Plain HTML + JavaScript frontend pages
+- Shared CSS design system in public/assets/ui.css
+
+## Frontend Structure
+
+- public/index.html
+- public/admin/index.html
+- public/admin/login.html
+- public/admin/dashboard.html
+- public/verify/index.html
+- public/verify/check.html
+- public/assets/ui.css
 
 ## Project Pages
 
@@ -58,7 +69,12 @@ Change this immediately in production.
     - php artisan migrate:fresh --seed
 
 5. Start app:
-    - php artisan serve
+    - Preferred (Laravel dev server): php artisan serve --host=127.0.0.1 --port=8000
+    - If port 8000 is unavailable/hangs in your environment: php -S 127.0.0.1:8080 -t public
+
+6. Open in browser:
+    - Main: http://127.0.0.1:8000/ or http://127.0.0.1:8080/
+    - Admin login: http://127.0.0.1:8000/admin/login or http://127.0.0.1:8080/admin/login
 
 ## Main API Endpoints
 
@@ -82,3 +98,4 @@ Admin endpoints require Authorization: Bearer {token}.
 - Uploaded files are stored in the local storage disk.
 - QR generation in the admin page is done client-side using qrcodejs.
 - Verification logs capture attempted code, status, IP, and user agent.
+- /login is redirected to /admin/login for compatibility.
