@@ -22,3 +22,28 @@
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# Sensitive env and secrets
+.env.*
+!.env.example
+*.pem
+*.p12
+*.pfx
+*.crt
+*.cer
+*.ovpn
+
+# Local databases
+/database/*.sqlite
+/database/*.db
+/database/*.sqlite3
+
+# SQL dumps and backups
+*.sql
+*.sql.gz
+*.dump
+*.bak
+*.backup
+*.tar
+*.zip
+*.7z
