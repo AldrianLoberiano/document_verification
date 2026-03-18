@@ -199,8 +199,8 @@
 
     async function refreshDashboard() {
       const [docs, logs] = await Promise.all([
-        api('../../api/admin/documents'),
-        api('../../api/admin/logs'),
+        api('../api/admin/documents'),
+        api('../api/admin/logs'),
       ]);
       renderDocuments(docs);
       renderLogs(logs);
@@ -214,7 +214,7 @@
       }
 
       try {
-        const me = await api('../../api/me');
+        const me = await api('../api/me');
         if (!me || me.role !== 'admin') {
           clearToken();
           window.location.replace('./login.html');
@@ -231,7 +231,7 @@
 
     logoutBtn.addEventListener('click', async () => {
       try {
-        await api('../../api/logout', { method: 'POST' });
+        await api('../api/logout', { method: 'POST' });
       } catch (error) {
       }
 
@@ -244,7 +244,7 @@
       const formData = new FormData(docForm);
 
       try {
-        await api('../../api/admin/documents', {
+        await api('../api/admin/documents', {
           method: 'POST',
           body: formData,
         });
@@ -271,11 +271,11 @@
         }
 
         if (action === 'download') {
-          window.open(`../../api/admin/documents/${doc.id}/download`, '_blank');
+          window.open(`../api/admin/documents/${doc.id}/download`, '_blank');
         }
 
         if (action === 'revoke') {
-          await api(`../../api/admin/documents/${doc.id}/revoke`, { method: 'POST' });
+          await api(`../api/admin/documents/${doc.id}/revoke`, { method: 'POST' });
           await refreshDashboard();
         }
 
@@ -283,7 +283,7 @@
           if (!confirm('Delete this document permanently?')) {
             return;
           }
-          await api(`../../api/admin/documents/${doc.id}`, { method: 'DELETE' });
+          await api(`../api/admin/documents/${doc.id}`, { method: 'DELETE' });
           await refreshDashboard();
         }
       } catch (error) {
