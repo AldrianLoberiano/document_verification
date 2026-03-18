@@ -95,7 +95,7 @@
       details.innerHTML = '';
 
       try {
-        const response = await fetch(`../../api/verify/${encodeURIComponent(code)}`);
+        const response = await fetch(`../api/verify/${encodeURIComponent(code)}`);
         const data = await response.json();
 
         const isValid = Boolean(data.valid);
