@@ -148,6 +148,9 @@
     const docForm = document.getElementById('doc-form');
     const documentsBody = document.getElementById('documents-body');
     const logsBody = document.getElementById('logs-body');
+    const dashboardSection = document.getElementById('dashboard');
+    const documentsPanel = document.getElementById('documents-panel');
+    const logsPanel = document.getElementById('logs-panel');
     const qrModal = document.getElementById('qr-modal');
     const closeQrBtn = document.getElementById('close-qr-btn');
     const qrContainer = document.getElementById('qr-container');
@@ -160,6 +163,17 @@
 
     function clearToken() {
       localStorage.removeItem(tokenKey);
+    }
+
+    function showLoginPrompt(message) {
+      authState.innerHTML = `${message} <a class="btn btn-ghost btn-compact" href="/admin/login">Go to Admin Login</a>`;
+      [dashboardSection, documentsPanel, logsPanel].forEach((panel) => {
+        if (panel) {
+          panel.hidden = true;
+        }
+      });
+      logoutBtn.disabled = true;
+      logoutBtn.setAttribute('aria-disabled', 'true');
     }
 
     async function api(url, options = {}) {
@@ -353,7 +367,7 @@
     async function enforceAdminSession() {
       const token = getToken();
       if (!token) {
-        window.location.replace('/admin/login');
+        showLoginPrompt('Admin session required.');
         return;
       }
 
@@ -361,7 +375,7 @@
         const me = await api('../api/me');
         if (!me || me.role !== 'admin') {
           clearToken();
-          window.location.replace('/admin/login');
+          showLoginPrompt('Admin access only.');
           return;
         }
 
@@ -369,7 +383,7 @@
         await refreshDashboard();
       } catch (error) {
         clearToken();
-        window.location.replace('/admin/login');
+        showLoginPrompt('Session expired.');
       }
     }
 
