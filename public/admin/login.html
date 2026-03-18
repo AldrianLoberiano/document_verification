@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Admin Login</title>
-  <link rel="stylesheet" href="/assets/ui.css">
+  <link rel="stylesheet" href="../assets/ui.css">
 </head>
 <body class="page-shell theme-admin">
   <main class="card card--narrow">
@@ -26,7 +26,7 @@
     </form>
     <p class="msg-error" id="message"></p>
     <div class="actions-grid" style="margin-top:12px;">
-      <a class="btn btn-ghost" href="/admin">Back to Admin Home</a>
+      <a class="btn btn-ghost" href="../admin">Back to Admin Home</a>
     </div>
   </main>
 
@@ -44,7 +44,7 @@
     }
 
     async function adminLogin(email, password) {
-      const response = await fetch('/api/admin/login', {
+      const response = await fetch('../../api/admin/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
@@ -74,7 +74,7 @@
         }
 
         setToken(data.token);
-        window.location.href = '/admin/dashboard';
+        window.location.href = 'dashboard';
       } catch (error) {
         message.textContent = error.message;
       }
