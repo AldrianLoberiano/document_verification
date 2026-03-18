@@ -8,6 +8,7 @@ Route::redirect('/admin/login.html', '/admin/login');
 Route::redirect('/admin/dashboard.html', '/admin/dashboard');
 Route::redirect('/verify/index.html', '/verify');
 Route::redirect('/verify/check.html', '/verify/check');
+Route::redirect('/check', '/verify/check');
 
 Route::get('/', function () {
     return response()->file(resource_path('views/html/index.html'));
