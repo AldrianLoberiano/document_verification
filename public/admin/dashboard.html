@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Admin Dashboard - Document Verification</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" defer></script>
-  <link rel="stylesheet" href="/assets/ui.css">
+  <link rel="stylesheet" href="../assets/ui.css">
   <style>
     .status-active { color: var(--ok-600); font-weight: 700; }
     .status-revoked { color: var(--danger-600); font-weight: 700; }
@@ -31,7 +31,7 @@
           <p class="subtext" id="auth-state">Checking session...</p>
         </div>
         <div class="inline-actions">
-          <a class="btn btn-ghost" href="/admin">Admin Home</a>
+          <a class="btn btn-ghost" href="../admin">Admin Home</a>
           <button id="logout-btn" class="danger" type="button">Logout</button>
         </div>
       </div>
@@ -199,8 +199,8 @@
 
     async function refreshDashboard() {
       const [docs, logs] = await Promise.all([
-        api('/api/admin/documents'),
-        api('/api/admin/logs'),
+        api('../../api/admin/documents'),
+        api('../../api/admin/logs'),
       ]);
       renderDocuments(docs);
       renderLogs(logs);
@@ -209,15 +209,15 @@
     async function enforceAdminSession() {
       const token = getToken();
       if (!token) {
-        window.location.replace('/admin/login');
+        window.location.replace('../login');
         return;
       }
 
       try {
-        const me = await api('/api/me');
+        const me = await api('../../api/me');
         if (!me || me.role !== 'admin') {
           clearToken();
-          window.location.replace('/admin/login');
+          window.location.replace('../login');
           return;
         }
 
@@ -225,18 +225,18 @@
         await refreshDashboard();
       } catch (error) {
         clearToken();
-        window.location.replace('/admin/login');
+          window.location.replace('../login');
       }
     }
 
     logoutBtn.addEventListener('click', async () => {
       try {
-        await api('/api/logout', { method: 'POST' });
+        await api('../../api/logout', { method: 'POST' });
       } catch (error) {
       }
 
       clearToken();
-      window.location.replace('/admin/login');
+      window.location.replace('../login');
     });
 
     docForm.addEventListener('submit', async (event) => {
@@ -244,7 +244,7 @@
       const formData = new FormData(docForm);
 
       try {
-        await api('/api/admin/documents', {
+        await api('../../api/admin/documents', {
           method: 'POST',
           body: formData,
         });
@@ -271,11 +271,11 @@
         }
 
         if (action === 'download') {
-          window.open(`/api/admin/documents/${doc.id}/download`, '_blank');
+          window.open(`../../api/admin/documents/${doc.id}/download`, '_blank');
         }
 
         if (action === 'revoke') {
-          await api(`/api/admin/documents/${doc.id}/revoke`, { method: 'POST' });
+          await api(`../../api/admin/documents/${doc.id}/revoke`, { method: 'POST' });
           await refreshDashboard();
         }
 
@@ -283,7 +283,7 @@
           if (!confirm('Delete this document permanently?')) {
             return;
           }
-          await api(`/api/admin/documents/${doc.id}`, { method: 'DELETE' });
+          await api(`../../api/admin/documents/${doc.id}`, { method: 'DELETE' });
           await refreshDashboard();
         }
       } catch (error) {
