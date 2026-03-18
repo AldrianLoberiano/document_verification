@@ -70,11 +70,18 @@ Change this immediately in production.
 
 5. Start app:
     - Preferred (Laravel dev server): php artisan serve --host=127.0.0.1 --port=8000
-    - If port 8000 is unavailable/hangs in your environment: php -S 127.0.0.1:8080 -t public
+    - If port 8000 is unavailable/hangs in your environment: php -S 127.0.0.1:8080 -t public public/index.php
 
 6. Open in browser:
     - Main: http://127.0.0.1:8000/ or http://127.0.0.1:8080/
     - Admin login: http://127.0.0.1:8000/admin/login or http://127.0.0.1:8080/admin/login
+
+## Troubleshooting
+
+- Error: "The requested resource /admin was not found on this server."
+    - Cause: Your web server is serving static files only and is not forwarding Laravel routes to `public/index.php`.
+    - Fix for PHP built-in server: use `php -S 127.0.0.1:8080 -t public public/index.php`.
+    - Fix for XAMPP/Apache: point `DocumentRoot` to the project's `public` directory and ensure `mod_rewrite` is enabled.
 
 ## Main API Endpoints
 
