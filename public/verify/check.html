@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Verify Document</title>
-  <link rel="stylesheet" href="/assets/ui.css">
+  <link rel="stylesheet" href="../assets/ui.css">
   <style>
     .verify-wrap { width: min(860px, 100%); display: grid; gap: 14px; position: relative; z-index: 2; }
     .verify-form { display: grid; grid-template-columns: 1fr auto; gap: 10px; }
@@ -31,7 +31,7 @@
         <button class="btn-mint" type="submit">Verify</button>
       </form>
       <div class="actions-grid" style="margin-top:12px;">
-        <a class="btn btn-ghost" href="/verify">Back to Verification Home</a>
+        <a class="btn btn-ghost" href="../verify">Back to Verification Home</a>
       </div>
     </div>
 
@@ -52,8 +52,12 @@
 
     function extractCodeFromUrl() {
       const pathParts = window.location.pathname.split('/').filter(Boolean);
-      if (pathParts.length === 2 && pathParts[0].toLowerCase() === 'verify') {
-        return pathParts[1];
+      const verifyIndex = pathParts.findIndex((part) => part.toLowerCase() === 'verify');
+      if (verifyIndex !== -1 && pathParts.length > verifyIndex + 1) {
+        const candidate = pathParts[verifyIndex + 1];
+        if (candidate.toLowerCase() !== 'check') {
+          return candidate;
+        }
       }
       const queryCode = new URLSearchParams(window.location.search).get('code');
       return queryCode || '';
@@ -91,7 +95,7 @@
       details.innerHTML = '';
 
       try {
-        const response = await fetch(`/api/verify/${encodeURIComponent(code)}`);
+        const response = await fetch(`../../api/verify/${encodeURIComponent(code)}`);
         const data = await response.json();
 
         const isValid = Boolean(data.valid);
