@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="../assets/ui.css">
 </head>
 <body class="page-shell theme-admin">
-  <main class="card card--narrow">
+  <main class="card card--narrow card--admin">
     <span class="kicker">Restricted Access</span>
     <h1>Admin Login</h1>
     <p class="subtext">Only users with an <strong>admin</strong> role can sign in here.</p>
@@ -22,11 +22,21 @@
           <input type="password" id="password" value="Admin@12345" required>
         </label>
       </div>
-      <button class="primary" type="submit" style="width:100%;">Sign In as Admin</button>
+      <button class="primary btn-detail btn-compact" type="submit" style="width:100%; justify-content:center;">
+        <span class="button-stack" style="justify-items:center;">
+          <span class="btn-title">Sign In as Admin</span>
+          <span class="btn-note">Open the dashboard and manage documents securely</span>
+        </span>
+      </button>
     </form>
     <p class="msg-error" id="message"></p>
     <div class="actions-grid" style="margin-top:12px;">
-      <a class="btn btn-ghost" href="../admin/index.html">Back to Admin Home</a>
+      <a class="btn btn-ghost btn-detail" href="../admin/index.html">
+        <span class="button-stack">
+          <span class="btn-title">Back to Admin Home</span>
+          <span class="btn-note">Review the admin access overview first</span>
+        </span>
+      </a>
     </div>
   </main>
 
