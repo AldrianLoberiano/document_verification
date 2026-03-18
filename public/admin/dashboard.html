@@ -66,7 +66,7 @@
           <p class="subtext" id="auth-state">Checking session...</p>
         </div>
         <div class="inline-actions">
-          <a class="btn btn-ghost" href="../admin/index.html">Admin Home</a>
+          <a class="btn btn-ghost" href="/admin">Admin Home</a>
           <button id="logout-btn" class="danger" type="button">Logout</button>
         </div>
       </div>
@@ -353,7 +353,7 @@
     async function enforceAdminSession() {
       const token = getToken();
       if (!token) {
-        window.location.replace('login');
+        window.location.replace('/admin/login');
         return;
       }
 
@@ -361,7 +361,7 @@
         const me = await api('../api/me');
         if (!me || me.role !== 'admin') {
           clearToken();
-          window.location.replace('login');
+          window.location.replace('/admin/login');
           return;
         }
 
@@ -369,7 +369,7 @@
         await refreshDashboard();
       } catch (error) {
         clearToken();
-        window.location.replace('login');
+        window.location.replace('/admin/login');
       }
     }
 
@@ -380,7 +380,7 @@
       }
 
       clearToken();
-      window.location.replace('login');
+      window.location.replace('/admin/login');
     });
 
     docForm.addEventListener('submit', async (event) => {
