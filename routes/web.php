@@ -2,8 +2,13 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::redirect('/', '/index.html');
-Route::redirect('/login', '/admin/login');
+Route::get('/', function () {
+    return response()->file(public_path('index.html'));
+});
+
+Route::get('/login', function () {
+    return response()->file(public_path('admin/login.html'));
+});
 
 Route::get('/admin', function () {
     return response()->file(public_path('admin/index.html'));
