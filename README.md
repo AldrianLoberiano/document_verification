@@ -23,12 +23,12 @@ This implementation uses plain HTML templates from the public folder (no Blade t
 
 ## Frontend Structure
 
-- public/index.html
-- public/admin/index.html
-- public/admin/login.html
-- public/admin/dashboard.html
-- public/verify/index.html
-- public/verify/check.html
+- resources/views/html/index.html
+- resources/views/html/admin/index.html
+- resources/views/html/admin/login.html
+- resources/views/html/admin/dashboard.html
+- resources/views/html/verify/index.html
+- resources/views/html/verify/check.html
 - public/assets/ui.css
 
 ## Project Pages
