@@ -28,10 +28,20 @@
       <p class="subtext">Enter or scan the verification code printed on the document QR.</p>
       <form id="verify-form" class="verify-form">
         <input id="code-input" name="code" placeholder="Enter verification code" required>
-        <button class="btn-mint" type="submit">Verify</button>
+        <button class="btn-mint btn-detail btn-compact" type="submit">
+          <span class="button-stack" style="justify-items:center;">
+            <span class="btn-title">Verify</span>
+            <span class="btn-note">Check authenticity in the public registry</span>
+          </span>
+        </button>
       </form>
       <div class="actions-grid" style="margin-top:12px;">
-        <a class="btn btn-ghost" href="../verify/index.html">Back to Verification Home</a>
+        <a class="btn btn-ghost btn-detail" href="../verify/index.html">
+          <span class="button-stack">
+            <span class="btn-title">Back to Verification Home</span>
+            <span class="btn-note">Review the public portal before checking a code</span>
+          </span>
+        </a>
       </div>
     </div>
 
