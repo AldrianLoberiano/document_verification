@@ -31,7 +31,7 @@
     </form>
     <p class="msg-error" id="message"></p>
     <div class="actions-grid" style="margin-top:12px;">
-      <a class="btn btn-ghost btn-detail" href="../admin/index.html">
+      <a class="btn btn-ghost btn-detail" href="/admin">
         <span class="button-stack">
           <span class="btn-title">Back to Admin Home</span>
           <span class="btn-note">Review the admin access overview first</span>
@@ -84,7 +84,7 @@
         }
 
         setToken(data.token);
-        window.location.href = 'dashboard.html';
+        window.location.href = '/admin/dashboard';
       } catch (error) {
         message.textContent = error.message;
       }
