@@ -28,6 +28,7 @@
       padding: 20px;
       z-index: 120;
     }
+    .modal-overlay[hidden] { display: none !important; }
     .modal-card {
       width: min(460px, 100%);
       background: #fff;
@@ -196,13 +197,14 @@
     function renderDocuments(items) {
       documentsBody.innerHTML = '';
       items.forEach((doc) => {
+        const verificationUrl = getVerificationUrl(doc);
         const tr = document.createElement('tr');
         tr.innerHTML = `
           <td>${escapeHtml(doc.title)}</td>
           <td>${escapeHtml(doc.document_type)}</td>
           <td>${escapeHtml(doc.verification_code)}</td>
           <td class="status-${escapeHtml(doc.status)}">${escapeHtml(doc.status)}</td>
-          <td><a class="table-link" href="${escapeHtml(doc.verification_url)}" target="_blank">${escapeHtml(doc.verification_url)}</a></td>
+          <td><a class="table-link" href="${escapeHtml(verificationUrl)}" target="_blank">${escapeHtml(verificationUrl)}</a></td>
           <td>
             <div class="inline-actions">
               <button data-action="qr">Show QR</button>
@@ -212,9 +214,22 @@
             </div>
           </td>
         `;
-        tr.dataset.doc = JSON.stringify(doc);
+        tr.dataset.doc = JSON.stringify({ ...doc, verification_url: verificationUrl });
         documentsBody.appendChild(tr);
       });
+    }
+
+    function getVerificationUrl(doc) {
+      if (doc && doc.verification_url) {
+        return String(doc.verification_url);
+      }
+
+      const code = doc && doc.verification_code ? String(doc.verification_code).trim() : '';
+      if (!code) {
+        return `${window.location.origin}/verify/check`;
+      }
+
+      return `${window.location.origin}/verify/${encodeURIComponent(code)}`;
     }
 
     function renderLogs(items) {
@@ -249,6 +264,9 @@
         fallback.width = 180;
         fallback.height = 180;
         fallback.src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(url)}`;
+        fallback.onerror = () => {
+          qrContainer.innerHTML = '<p class="subtext">Unable to render QR image from external service. Check internet access and try again.</p>';
+        };
         qrContainer.appendChild(fallback);
       }
 
@@ -417,17 +435,23 @@
       }
     });
 
-    downloadQrBtn.addEventListener('click', () => {
-      downloadQrImage();
-    });
+    if (downloadQrBtn) {
+      downloadQrBtn.addEventListener('click', () => {
+        downloadQrImage();
+      });
+    }
 
-    closeQrBtn.addEventListener('click', closeQrModal);
+    if (closeQrBtn) {
+      closeQrBtn.addEventListener('click', closeQrModal);
+    }
 
-    qrModal.addEventListener('click', (event) => {
-      if (event.target === qrModal) {
-        closeQrModal();
-      }
-    });
+    if (qrModal) {
+      qrModal.addEventListener('click', (event) => {
+        if (event.target === qrModal) {
+          closeQrModal();
+        }
+      });
+    }
 
     window.addEventListener('keydown', (event) => {
       if (event.key === 'Escape' && !qrModal.hidden) {
