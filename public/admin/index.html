@@ -4,12 +4,28 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Admin Home</title>
-  <meta http-equiv="refresh" content="0; url=/admin/login">
-  <script>
-    window.location.replace('/admin/login');
-  </script>
+  <link rel="stylesheet" href="../assets/ui.css">
 </head>
 <body>
-  Redirecting to admin login...
+  <body class="page-shell theme-admin">
+  <main class="card card--admin">
+    <span class="kicker">Admin Zone</span>
+    <h1>Admin Home</h1>
+    <p class="subtext">This area is for authorized admin users only. Sign in first before managing official documents, QR codes, and verification logs.</p>
+    <div class="actions-grid">
+      <a class="btn btn-primary btn-detail" href="/admin/login">
+        <span class="button-stack">
+          <span class="btn-title">Continue to Admin Login</span>
+          <span class="btn-note">Use the admin account to access the dashboard</span>
+        </span>
+      </a>
+      <a class="btn btn-ghost btn-detail" href="/">
+        <span class="button-stack">
+          <span class="btn-title">Back to Main Homepage</span>
+          <span class="btn-note">Return to the public landing page</span>
+        </span>
+      </a>
+    </div>
+  </main>
 </body>
 </html>
