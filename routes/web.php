@@ -13,9 +13,7 @@ Route::get('/', function () {
     return response()->file(resource_path('views/html/index.html'));
 });
 
-Route::get('/login', function () {
-    return response()->file(resource_path('views/html/admin/login.html'));
-});
+Route::redirect('/login', '/admin/login');
 
 Route::get('/admin', function () {
     return response()->file(resource_path('views/html/admin/index.html'));
