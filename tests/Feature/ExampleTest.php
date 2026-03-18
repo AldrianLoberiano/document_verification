@@ -20,4 +20,11 @@ class ExampleTest extends TestCase
 
         $response->assertRedirect('/admin/login');
     }
+
+    public function test_check_alias_redirects_to_verification_page(): void
+    {
+        $response = $this->get('/check');
+
+        $response->assertRedirect('/verify/check');
+    }
 }
