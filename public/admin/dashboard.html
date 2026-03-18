@@ -19,6 +19,40 @@
       text-decoration: none;
     }
     #qr-container { min-height: 128px; }
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 18, 36, 0.62);
+      display: grid;
+      place-items: center;
+      padding: 20px;
+      z-index: 120;
+    }
+    .modal-card {
+      width: min(460px, 100%);
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 22px 48px rgba(0, 0, 0, 0.22);
+      padding: 18px;
+      display: grid;
+      gap: 10px;
+    }
+    .modal-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+    .modal-close {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      border: 1px solid var(--line-200);
+      background: #fff;
+      cursor: pointer;
+      font-size: 18px;
+      line-height: 1;
+    }
   </style>
 </head>
 <body class="page-shell theme-admin" style="display:block;">
@@ -31,7 +65,7 @@
           <p class="subtext" id="auth-state">Checking session...</p>
         </div>
         <div class="inline-actions">
-          <a class="btn btn-ghost" href="./index.html">Admin Home</a>
+          <a class="btn btn-ghost" href="../admin">Admin Home</a>
           <button id="logout-btn" class="danger" type="button">Logout</button>
         </div>
       </div>
@@ -90,14 +124,20 @@
       </div>
     </section>
 
-    <section class="panel" id="qr-panel" hidden>
-      <h2>Generated QR Code</h2>
+  </div>
+
+  <div id="qr-modal" class="modal-overlay" hidden>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="qr-modal-title">
+      <div class="modal-head">
+        <h2 id="qr-modal-title">Generated QR Code</h2>
+        <button id="close-qr-btn" class="modal-close" type="button" aria-label="Close QR popup">x</button>
+      </div>
       <p class="muted" id="qr-url-text"></p>
       <div id="qr-container"></div>
       <div class="inline-actions" style="margin-top:10px;">
         <button id="download-qr-btn" type="button" class="secondary">Download QR</button>
       </div>
-    </section>
+    </div>
   </div>
 
   <script>
@@ -107,7 +147,8 @@
     const docForm = document.getElementById('doc-form');
     const documentsBody = document.getElementById('documents-body');
     const logsBody = document.getElementById('logs-body');
-    const qrPanel = document.getElementById('qr-panel');
+    const qrModal = document.getElementById('qr-modal');
+    const closeQrBtn = document.getElementById('close-qr-btn');
     const qrContainer = document.getElementById('qr-container');
     const qrUrlText = document.getElementById('qr-url-text');
     const downloadQrBtn = document.getElementById('download-qr-btn');
@@ -191,14 +232,32 @@
     }
 
     function showQr(url) {
-      qrPanel.hidden = false;
+      qrModal.hidden = false;
       qrUrlText.textContent = url;
       qrContainer.innerHTML = '';
-      new QRCode(qrContainer, {
-        text: url,
-        width: 180,
-        height: 180,
-      });
+
+      if (typeof QRCode === 'function') {
+        new QRCode(qrContainer, {
+          text: url,
+          width: 180,
+          height: 180,
+        });
+      } else {
+        // Fallback in case CDN QR library is blocked or unavailable.
+        const fallback = document.createElement('img');
+        fallback.alt = 'QR Code';
+        fallback.width = 180;
+        fallback.height = 180;
+        fallback.src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(url)}`;
+        qrContainer.appendChild(fallback);
+      }
+
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeQrModal() {
+      qrModal.hidden = true;
+      document.body.style.overflow = '';
     }
 
     async function downloadDocument(documentId) {
@@ -276,7 +335,7 @@
     async function enforceAdminSession() {
       const token = getToken();
       if (!token) {
-        window.location.replace('./login.html');
+        window.location.replace('login');
         return;
       }
 
@@ -284,7 +343,7 @@
         const me = await api('../api/me');
         if (!me || me.role !== 'admin') {
           clearToken();
-          window.location.replace('./login.html');
+          window.location.replace('login');
           return;
         }
 
@@ -292,7 +351,7 @@
         await refreshDashboard();
       } catch (error) {
         clearToken();
-          window.location.replace('./login.html');
+        window.location.replace('login');
       }
     }
 
@@ -303,7 +362,7 @@
       }
 
       clearToken();
-      window.location.replace('./login.html');
+      window.location.replace('login');
     });
 
     docForm.addEventListener('submit', async (event) => {
@@ -360,6 +419,20 @@
 
     downloadQrBtn.addEventListener('click', () => {
       downloadQrImage();
+    });
+
+    closeQrBtn.addEventListener('click', closeQrModal);
+
+    qrModal.addEventListener('click', (event) => {
+      if (event.target === qrModal) {
+        closeQrModal();
+      }
+    });
+
+    window.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && !qrModal.hidden) {
+        closeQrModal();
+      }
     });
 
     enforceAdminSession();
