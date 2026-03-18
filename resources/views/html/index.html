@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="assets/ui.css">
 </head>
 <body class="page-shell theme-main">
-  <main class="card">
+  <main class="card card--main">
     <span class="kicker">QR Integrity Platform</span>
     <h1>Document Verification System</h1>
     <p class="subtext">
@@ -15,8 +15,32 @@
       Anyone can verify a document instantly through the public verification portal.
     </p>
     <div class="actions-grid">
-      <a class="btn btn-primary" href="admin/login.html">Open Admin Workspace</a>
-      <a class="btn btn-mint" href="verify/check.html">Open Verification Portal</a>
+      <a class="btn btn-primary btn-detail" href="admin/login.html">
+        <span class="button-stack">
+          <span class="btn-title">Open Admin Workspace</span>
+          <span class="btn-note">Manage uploads, QR codes, and document logs</span>
+        </span>
+      </a>
+      <a class="btn btn-mint btn-detail" href="verify/check.html">
+        <span class="button-stack">
+          <span class="btn-title">Open Verification Portal</span>
+          <span class="btn-note">Check a document code or scan the QR instantly</span>
+        </span>
+      </a>
+    </div>
+    <div class="hero-grid">
+      <div class="hero-tile">
+        <strong>Fast verification</strong>
+        <span>Public access for anyone who needs to validate a document in seconds.</span>
+      </div>
+      <div class="hero-tile">
+        <strong>Admin controls</strong>
+        <span>Upload, revoke, and download official files from one focused dashboard.</span>
+      </div>
+      <div class="hero-tile">
+        <strong>QR ready</strong>
+        <span>Each document gets a unique verification code that works with the public URL.</span>
+      </div>
     </div>
     <p class="subtext" style="margin-top:14px;">
       QR scanning format: <strong>/verify/CODE123ABC</strong>
