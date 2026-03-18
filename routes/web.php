@@ -2,34 +2,41 @@
 
 use Illuminate\Support\Facades\Route;
 
+Route::redirect('/index.html', '/');
+Route::redirect('/admin/index.html', '/admin');
+Route::redirect('/admin/login.html', '/admin/login');
+Route::redirect('/admin/dashboard.html', '/admin/dashboard');
+Route::redirect('/verify/index.html', '/verify');
+Route::redirect('/verify/check.html', '/verify/check');
+
 Route::get('/', function () {
-    return response()->file(public_path('index.html'));
+    return response()->file(resource_path('views/html/index.html'));
 });
 
 Route::get('/login', function () {
-    return response()->file(public_path('admin/login.html'));
+    return response()->file(resource_path('views/html/admin/login.html'));
 });
 
 Route::get('/admin', function () {
-    return response()->file(public_path('admin/index.html'));
+    return response()->file(resource_path('views/html/admin/index.html'));
 });
 
 Route::get('/admin/login', function () {
-    return response()->file(public_path('admin/login.html'));
+    return response()->file(resource_path('views/html/admin/login.html'));
 });
 
 Route::get('/admin/dashboard', function () {
-    return response()->file(public_path('admin/dashboard.html'));
+    return response()->file(resource_path('views/html/admin/dashboard.html'));
 });
 
 Route::get('/verify', function () {
-    return response()->file(public_path('verify/index.html'));
+    return response()->file(resource_path('views/html/verify/index.html'));
 });
 
 Route::get('/verify/check', function () {
-    return response()->file(public_path('verify/check.html'));
+    return response()->file(resource_path('views/html/verify/check.html'));
 });
 
 Route::get('/verify/{code}', function () {
-    return response()->file(public_path('verify/check.html'));
+    return response()->file(resource_path('views/html/verify/check.html'));
 });
