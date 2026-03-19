@@ -48,6 +48,18 @@
       display: grid;
       gap: 14px;
     }
+    #dashboard {
+      max-height: 68vh;
+      overflow-y: auto;
+      padding-right: 12px;
+    }
+    #dashboard::-webkit-scrollbar {
+      width: 10px;
+    }
+    #dashboard::-webkit-scrollbar-thumb {
+      background: #c2cde3;
+      border-radius: 999px;
+    }
     .table-link {
       display: inline-block;
       max-width: 280px;
@@ -102,6 +114,9 @@
       }
       .sidebar-nav {
         grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      }
+      #dashboard {
+        max-height: 60vh;
       }
     }
   </style>
