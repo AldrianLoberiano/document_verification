@@ -27,3 +27,5 @@ Route::get('/verify/check.html', static fn() => $page('verify/check'));
 
 Route::redirect('/login', '/admin/login');
 Route::redirect('/check', '/verify/check');
+Route::redirect('/home', '/');
+Route::redirect('/homepage', '/');
