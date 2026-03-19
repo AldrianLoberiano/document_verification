@@ -9,6 +9,45 @@
   <style>
     .status-active { color: var(--ok-600); font-weight: 700; }
     .status-revoked { color: var(--danger-600); font-weight: 700; }
+    .admin-shell {
+      width: min(1240px, 100%);
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr);
+      gap: 14px;
+      position: relative;
+      z-index: 2;
+      align-items: start;
+    }
+    .admin-sidebar {
+      position: sticky;
+      top: 20px;
+      background: #fff;
+      border: var(--shell-border);
+      border-radius: 18px;
+      box-shadow: var(--shadow-1);
+      padding: 16px;
+      display: grid;
+      gap: 12px;
+    }
+    .sidebar-nav {
+      display: grid;
+      gap: 8px;
+    }
+    .sidebar-link {
+      text-decoration: none;
+      color: var(--ink-700);
+      border: 1px solid var(--line-200);
+      border-radius: 12px;
+      background: #f6f9ff;
+      padding: 10px 12px;
+      font-weight: 700;
+      font-size: 0.94rem;
+    }
+    .admin-main {
+      width: 100%;
+      display: grid;
+      gap: 14px;
+    }
     .table-link {
       display: inline-block;
       max-width: 280px;
@@ -54,10 +93,37 @@
       font-size: 18px;
       line-height: 1;
     }
+    @media (max-width: 980px) {
+      .admin-shell {
+        grid-template-columns: 1fr;
+      }
+      .admin-sidebar {
+        position: static;
+      }
+      .sidebar-nav {
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      }
+    }
   </style>
 </head>
 <body class="page-shell theme-admin" style="display:block;">
-  <div class="layout-stack">
+  <div class="admin-shell">
+    <aside class="admin-sidebar">
+      <div>
+        <span class="kicker">Admin Menu</span>
+        <h2 style="margin-top:4px;">Navigation</h2>
+        <p class="subtext" style="margin-top:6px;">Quick access to all admin sections.</p>
+      </div>
+      <nav class="sidebar-nav">
+        <a class="sidebar-link" href="#dashboard">Upload Document</a>
+        <a class="sidebar-link" href="#documents-panel">Documents List</a>
+        <a class="sidebar-link" href="#logs-panel">Verification Logs</a>
+        <a class="sidebar-link" href="/admin">Admin Home</a>
+      </nav>
+      <button id="logout-btn" class="danger" type="button">Logout</button>
+    </aside>
+
+    <main class="admin-main">
     <section class="panel">
       <div class="topbar">
         <div>
@@ -66,8 +132,7 @@
           <p class="subtext" id="auth-state">Checking session...</p>
         </div>
         <div class="inline-actions">
-          <a class="btn btn-ghost" href="../admin">Admin Home</a>
-          <button id="logout-btn" class="danger" type="button">Logout</button>
+          <a class="btn btn-ghost" href="/admin">Admin Home</a>
         </div>
       </div>
     </section>
@@ -125,6 +190,7 @@
       </div>
     </section>
 
+    </main>
   </div>
 
   <div id="qr-modal" class="modal-overlay" hidden>
