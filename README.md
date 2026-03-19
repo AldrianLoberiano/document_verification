@@ -2,7 +2,7 @@
 
 Full-stack Laravel application for uploading, managing, and publicly verifying official documents using unique QR verification codes.
 
-This implementation uses plain HTML templates from the public folder (no Blade templates for the user interfaces).
+This implementation uses plain HTML templates from resources/views/html served through Laravel routes.
 
 ## Core Features
 
@@ -82,6 +82,10 @@ Change this immediately in production.
     - Cause: Your web server is serving static files only and is not forwarding Laravel routes to `public/index.php`.
     - Fix for PHP built-in server: use `php -S 127.0.0.1:8080 -t public public/index.php`.
     - Fix for XAMPP/Apache: point `DocumentRoot` to the project's `public` directory and ensure `mod_rewrite` is enabled.
+
+- Error: browser shows repeated redirects on `/admin/login`
+    - Cause: stale route/config cache or conflicting legacy/static routes.
+    - Fix: run `php artisan route:clear` and `php artisan optimize:clear`, then reload.
 
 ## Main API Endpoints
 
